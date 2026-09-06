@@ -9,19 +9,26 @@ This is the plain-language guide for keeping the plant pages up to date. You do 
 - **Visitor submissions**: your Netlify dashboard, under Forms
 - **Printable QR codes**: https://lakota-plants.netlify.app/qr/yarrow.png (one per plant, named after the plant's web address; there is also a `.svg` version for the printer)
 
-## Logging in the first time
+## Logging in
 
-The editor saves changes straight into the site's GitHub repository, so it needs permission to write there. As the only editor right now, the simplest way is a personal token.
+Open https://lakota-plants.netlify.app/admin/ and press **Sign In with GitHub**. The first time, GitHub asks you to authorize "Lakota plants editor"; after that you stay signed in on that device. Anyone with write access to the `lakota-plants` repository on GitHub can edit.
 
-1. Open https://github.com/settings/personal-access-tokens/new while signed in to GitHub.
-2. Token name: `Lakota plants editor`. Expiration: pick the longest you are comfortable with (you can make a new one later).
-3. Resource owner: the account that owns the `lakota-plants` repository.
-4. Repository access: **Only select repositories**, then choose `lakota-plants`.
-5. Permissions, under Repository permissions: set **Contents** to **Read and write**. Leave everything else alone.
-6. Generate the token and copy it. GitHub only shows it once.
-7. Open the editor, choose **Sign in with token**, and paste it. The token stays in your browser, so you only do this once per device.
+### One-time setup (already done if the button works)
 
-When more people need to edit, switch to GitHub login through Netlify: create a GitHub OAuth app with callback `https://api.netlify.com/auth/done`, then in Netlify open Project configuration, Access and security, OAuth, and install it. Nothing in the editor needs to change.
+The button relies on a GitHub OAuth app registered with Netlify. If you ever need to recreate it:
+
+1. GitHub: Settings, Developer settings, OAuth Apps, New OAuth App. Name `Lakota plants editor`, homepage `https://lakota-plants.netlify.app`, authorization callback URL exactly `https://api.netlify.com/auth/done`. Copy the Client ID and generate a Client Secret.
+2. Netlify: the project, Project configuration, Access and security, OAuth, Install provider, GitHub, paste the ID and secret.
+
+### Adding an editor
+
+1. They create a free GitHub account at https://github.com/signup.
+2. On the repository page, Settings, Collaborators, Add people, enter their username, and give them **Write** access. They accept the invitation by email.
+3. They open the editor and press Sign In with GitHub.
+
+### If the button ever fails
+
+Press **Sign In Using Access Token** instead. Create the token at https://github.com/settings/personal-access-tokens/new: repository access limited to `lakota-plants`, and under Repository permissions set **Contents** to Read and write. Paste it into the editor. Tokens expire, so this is the fallback, not the everyday way in.
 
 ## What each plant field means
 
