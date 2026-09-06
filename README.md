@@ -48,6 +48,18 @@ scripts/check-dist.mjs     asserts every plant page has the form, disclaimer, pr
 
 Each plant page is tinted by the plant's own color (the `accent` field). The Lakota name is the hero. One motion only: the Listen button pulses while audio plays. High contrast for reading in sunlight; light and dark mode follow the phone.
 
+## Updating the CMS
+
+The admin page pins Sveltia CMS to an exact version with an integrity hash. To update:
+
+```
+npm view @sveltia/cms version
+curl -sSL -o /tmp/cms.js https://unpkg.com/@sveltia/cms@<version>/dist/sveltia-cms.js
+openssl dgst -sha384 -binary /tmp/cms.js | openssl base64 -A
+```
+
+Put the new version and `sha384-<hash>` into `public/admin/index.html`.
+
 ## Deploying
 
 Push to `main` and Netlify builds. Each production deploy costs 15 of the free plan's 300 monthly credits, so batch content edits. Form detection must be enabled once in the Netlify Forms UI, and the email notification set there.

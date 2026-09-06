@@ -13,3 +13,12 @@ describe('renderMarkdown', () => {
     expect(renderMarkdown('   ')).toBe('');
   });
 });
+
+describe('renderMarkdown safety', () => {
+  test('escapes raw HTML instead of passing it through', () => {
+    const html = renderMarkdown('Hi <script>alert(1)</script> <b>there</b>');
+    expect(html).not.toContain('<script>');
+    expect(html).not.toContain('<b>');
+    expect(html).toContain('&lt;script&gt;');
+  });
+});
