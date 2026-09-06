@@ -1,0 +1,17 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PlantNav from '../components/PlantNav.astro';
+import ShareForm from '../components/ShareForm.astro';
+import { publishedPlants } from '../lib/plants';
+
+const plants = publishedPlants(await getCollection('plants'));
+---
+
+<Base title="Share what you know" description="Share a use, a story, a recipe or a photo of one of our plant relatives.">
+  <PlantNav slot="nav" plants={plants} />
+  <div class="wrap">
+    <h1 class="page-title">Share what you know</h1>
+    <ShareForm plants={plants} from="share" hideHeading />
+  </div>
+</Base>

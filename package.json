@@ -1,0 +1,26 @@
+{
+  "name": "lakota-plants",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Lakota plant relatives: names, pronunciation, uses, recipes and community stories for garden placards.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build && node scripts/make-qr.mjs && node scripts/check-dist.mjs",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test": "vitest run",
+    "qr": "node scripts/make-qr.mjs dist/qr"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.4",
+    "astro": "^7.3.1",
+    "marked": "^18.0.11"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "qrcode": "^1.5.4",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.0"
+  }
+}

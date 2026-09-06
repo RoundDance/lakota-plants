@@ -1,0 +1,135 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import site from '../data/site.json';
+import { checkboxName } from '../lib/plants';
+
+interface Props {
+  plants: CollectionEntry<'plants'>[];
+  selected?: string;
+  from: string;
+  hideHeading?: boolean;
+}
+
+const { plants, selected, from, hideHeading = false } = Astro.props;
+---
+
+<section class:list={["section", { "no-rule": hideHeading }]} aria-labelledby="share-heading">
+  <h2 id="share-heading" class:list={{ "sr-only": hideHeading }}>Share what you know</h2>
+  <p>{site.share_blurb}</p>
+
+  <form
+    class="form"
+    name="share"
+    method="POST"
+    action="/thank-you/"
+    enctype="multipart/form-data"
+    data-netlify="true"
+    netlify-honeypot="bot-field"
+  >
+    <input type="hidden" name="form-name" value="share" />
+    <input type="hidden" name="from_page" value={from} />
+    <p class="hidden">
+      <label>Leave this empty <input name="bot-field" /></label>
+    </p>
+
+    <fieldset>
+      <legend>Which plant relative is this about? <span class="hint">Choose as many as you like.</span></legend>
+      {
+        plants.map((plant) => (
+          <label class="choice" style={`--chip:${plant.data.accent}`}>
+            <input type="checkbox" name={checkboxName(plant.id)} value="yes" checked={plant.id === selected} />
+            <span class="dot" aria-hidden="true"></span>
+            <span>
+              {plant.data.lakota_name} <span class="hint">({plant.data.english_name})</span>
+            </span>
+          </label>
+        ))
+      }
+    </fieldset>
+
+    <div class="field">
+      <label for="share-message">Please share your knowledge, stories, or other information</label>
+      <textarea id="share-message" name="message" required></textarea>
+    </div>
+
+    <div class="field">
+      <label for="share-name">What's your name? <span class="hint">Optional</span></label>
+      <input id="share-name" type="text" name="name" autocomplete="name" />
+    </div>
+
+    <div class="field">
+      <label for="share-tribe">What tribe(s) do you belong to? <span class="hint">Optional</span></label>
+      <input id="share-tribe" type="text" name="tribe" />
+    </div>
+
+    <div class="field">
+      <label for="share-email">Email, in case we have questions <span class="hint">Optional</span></label>
+      <input id="share-email" type="email" name="email" autocomplete="email" />
+    </div>
+
+    <div class="field">
+      <label for="share-photo">Add a photo <span class="hint">Optional</span></label>
+      <input id="share-photo" type="file" name="photo" accept="image/*" />
+      <p class="status photo-status" aria-live="polite"></p>
+    </div>
+
+    <button class="button" type="submit">Send</button>
+  </form>
+</section>
+
+<script>
+  const MAX_BYTES = 7 * 1024 * 1024;
+  const SHRINK_ABOVE = 1_500_000;
+  const MAX_EDGE = 1600;
+
+  async function shrink(file: File): Promise<File> {
+    const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
+    const scale = Math.min(1, MAX_EDGE / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(bitmap.width * scale);
+    canvas.height = Math.round(bitmap.height * scale);
+    const context = canvas.getContext('2d');
+    if (!context) throw new Error('no canvas context');
+    context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    bitmap.close();
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.85));
+    if (!blob) throw new Error('toBlob failed');
+    return new File([blob], file.name.replace(/\.\w+$/, '') + '.jpg', { type: 'image/jpeg' });
+  }
+
+  for (const form of document.querySelectorAll<HTMLFormElement>('form[name="share"]')) {
+    const input = form.querySelector<HTMLInputElement>('input[type="file"]');
+    const status = form.querySelector<HTMLElement>('.photo-status');
+    const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    if (!input || !status || !submit) continue;
+
+    input.addEventListener('change', async () => {
+      status.textContent = '';
+      status.classList.remove('is-error');
+      submit.disabled = false;
+      const file = input.files?.[0];
+      if (!file) return;
+
+      let ready = file;
+      if (file.type.startsWith('image/') && file.size > SHRINK_ABOVE) {
+        status.textContent = 'Making the photo smaller so it sends faster.';
+        try {
+          ready = await shrink(file);
+          const transfer = new DataTransfer();
+          transfer.items.add(ready);
+          input.files = transfer.files;
+        } catch {
+          ready = file;
+        }
+      }
+
+      if (ready.size > MAX_BYTES) {
+        status.textContent = 'That photo is too large to send (over 7 MB). Please choose a smaller one.';
+        status.classList.add('is-error');
+        submit.disabled = true;
+        return;
+      }
+      status.textContent = `Photo ready (${(ready.size / 1024 / 1024).toFixed(1)} MB).`;
+    });
+  }
+</script>

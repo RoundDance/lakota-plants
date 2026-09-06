@@ -1,0 +1,52 @@
+---
+interface Props {
+  phonetic?: string;
+  audio?: string;
+}
+
+const { phonetic, audio } = Astro.props;
+---
+
+<div class="say" data-testid="pronunciation">
+  {
+    audio && (
+      <>
+        <button class="button listen" type="button" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 9v6h4l5 4V5L8 9H4zm11.5 3a3.5 3.5 0 0 0-2-3.2v6.4a3.5 3.5 0 0 0 2-3.2zM13.5 4.2v2.1a6 6 0 0 1 0 11.4v2.1a8 8 0 0 0 0-15.6z" />
+          </svg>
+          Listen
+        </button>
+        <audio hidden preload="none" src={audio}></audio>
+      </>
+    )
+  }
+  <p>{phonetic ? `Say it: ${phonetic}` : 'Pronunciation coming soon.'}</p>
+</div>
+
+<script>
+  document.addEventListener('click', (event) => {
+    const button = (event.target as HTMLElement).closest<HTMLButtonElement>('.listen');
+    if (!button) return;
+    const audio = button.parentElement?.querySelector('audio');
+    if (!audio) return;
+    if (audio.paused) {
+      void audio.play();
+    } else {
+      audio.pause();
+      audio.currentTime = 0;
+    }
+  });
+
+  function reflect(event: Event, playing: boolean) {
+    const audio = event.target;
+    if (!(audio instanceof HTMLAudioElement)) return;
+    const button = audio.parentElement?.querySelector('.listen');
+    button?.classList.toggle('is-playing', playing);
+    button?.setAttribute('aria-pressed', String(playing));
+  }
+
+  document.addEventListener('play', (event) => reflect(event, true), true);
+  document.addEventListener('pause', (event) => reflect(event, false), true);
+  document.addEventListener('ended', (event) => reflect(event, false), true);
+</script>

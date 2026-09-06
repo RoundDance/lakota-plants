@@ -1,0 +1,18 @@
+---
+import { renderMarkdown } from '../lib/markdown';
+
+interface Props {
+  text?: string;
+}
+
+const html = renderMarkdown(Astro.props.text);
+---
+
+{
+  html && (
+    <section class="section" aria-labelledby="sources-heading">
+      <h2 id="sources-heading">Sources</h2>
+      <div class="sources" set:html={html} />
+    </section>
+  )
+}

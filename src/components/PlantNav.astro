@@ -1,0 +1,47 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { plantHref } from '../lib/plants';
+
+interface Props {
+  plants: CollectionEntry<'plants'>[];
+  current?: string;
+}
+
+const { plants, current } = Astro.props;
+---
+
+<nav class="plant-nav" aria-label="Plants">
+  {
+    plants.map((plant) => (
+      <a
+        href={plantHref(plant.id)}
+        style={`--chip:${plant.data.accent}`}
+        aria-current={plant.id === current ? 'page' : undefined}
+      >
+        <span class="dot" aria-hidden="true"></span>
+        {plant.data.lakota_name}
+      </a>
+    ))
+  }
+</nav>
+
+<script>
+  function updateFade(nav: HTMLElement) {
+    const max = nav.scrollWidth - nav.clientWidth;
+    if (max <= 1) {
+      delete nav.dataset.more;
+      return;
+    }
+    const atEnd = nav.scrollLeft >= max - 1;
+    if (atEnd) delete nav.dataset.more;
+    else nav.dataset.more = 'end';
+  }
+
+  for (const nav of document.querySelectorAll<HTMLElement>('.plant-nav')) {
+    updateFade(nav);
+    nav.addEventListener('scroll', () => updateFade(nav), { passive: true });
+    window.addEventListener('resize', () => updateFade(nav));
+    // Bring the current plant's tab into view.
+    nav.querySelector('[aria-current="page"]')?.scrollIntoView({ inline: 'start', block: 'nearest' });
+  }
+</script>

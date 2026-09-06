@@ -1,0 +1,25 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+
+interface Props {
+  story: CollectionEntry<'stories'>;
+}
+
+const { story } = Astro.props;
+const { Content } = await render(story);
+const who = [story.data.contributor, story.data.affiliation].filter(Boolean).join(', ');
+const when = story.data.date?.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+const byline = [who && `Shared by ${who}`, when].filter(Boolean).join(', ');
+---
+
+<article class="entry">
+  <h3>{story.data.title}</h3>
+  {byline && <p class="byline">{byline}</p>}
+  {
+    story.data.image && (
+      <Image src={story.data.image} alt={story.data.title} widths={[480, 800]} sizes="(min-width: 40rem) 38rem, 100vw" />
+    )
+  }
+  <Content />
+</article>

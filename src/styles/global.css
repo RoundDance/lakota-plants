@@ -1,0 +1,569 @@
+/* ------------------------------------------------------------------
+   Tokens. The per-plant accent is set on <html> by the page; everything
+   else is one quiet neutral so the plant is the only thing that changes.
+   ------------------------------------------------------------------ */
+:root {
+  --ground: #f6f7f2;
+  --ground-2: #eceee6;
+  --ink: #17261b;
+  --ink-2: #5a6157;
+  --rule: #d8dcd0;
+  --caution: #9e3b2c;
+  --caution-bg: #f7e9e5;
+  --accent: #7c9c63;
+  --accent-tint: color-mix(in oklab, var(--accent) 24%, var(--ground));
+  --font-serif: "Gentium Book Plus", "Gentium Plus", "Noto Serif", Georgia, serif;
+  --font-sans: Andika, "Noto Sans", system-ui, sans-serif;
+  --measure: 38rem;
+  --gutter: clamp(1rem, 4vw, 2rem);
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground: #10201a;
+    --ground-2: #172a22;
+    --ink: #eef1e8;
+    --ink-2: #b8c0b2;
+    --rule: #2c3d34;
+    --caution: #e58c79;
+    --caution-bg: #3a1f19;
+    --accent-tint: color-mix(in oklab, var(--accent) 30%, var(--ground));
+  }
+}
+
+/* ---------- base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 112.5%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-serif);
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--ground);
+}
+
+img,
+svg {
+  max-width: 100%;
+  display: block;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 400;
+  line-height: 1.15;
+  margin: 0;
+  text-wrap: balance;
+}
+
+h2 {
+  font-size: 1.6rem;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+a {
+  color: inherit;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+}
+
+a:hover {
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+}
+
+:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.wrap {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.skip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 0.6rem 1rem;
+  background: var(--ink);
+  color: var(--ground);
+  transform: translateY(-120%);
+}
+
+.skip:focus {
+  transform: none;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.muted {
+  color: var(--ink-2);
+}
+
+/* ---------- buttons ---------- */
+.button {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1.05rem;
+  min-height: 3.25rem;
+  padding: 0 1.5rem;
+  border-radius: 999px;
+  border: 0;
+  background: var(--ink);
+  color: var(--ground);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button svg {
+  width: 1.15em;
+  height: 1.15em;
+  fill: currentColor;
+}
+
+/* ---------- site header and footer ---------- */
+.site-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.9rem var(--gutter);
+}
+
+.site-head .brand {
+  font-size: 1.05rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-head .short {
+  display: none;
+}
+
+@media (max-width: 30rem) {
+  .site-head .long {
+    display: none;
+  }
+
+  .site-head .short {
+    display: inline;
+  }
+}
+
+.site-head nav a {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+}
+
+.site-foot {
+  margin-top: 4rem;
+  padding: 2rem var(--gutter) 3rem;
+  background: var(--ground-2);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--ink-2);
+}
+
+.site-foot p {
+  margin-bottom: 0.5em;
+}
+
+/* ---------- plant nav (the tabs) ---------- */
+.plant-nav {
+  display: flex;
+  gap: 0.35rem;
+  overflow-x: auto;
+  padding: 0.25rem var(--gutter) 0.7rem;
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: var(--gutter);
+}
+
+.plant-nav::-webkit-scrollbar {
+  display: none;
+}
+
+/* Fade the right edge while there is more to scroll, so phones can tell the strip moves. */
+.plant-nav[data-more="end"] {
+  mask-image: linear-gradient(to right, #000 calc(100% - 3.5rem), transparent);
+}
+
+.plant-nav a {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  font-size: 0.95rem;
+  scroll-snap-align: start;
+}
+
+.plant-nav a[aria-current="page"] {
+  background: color-mix(in oklab, var(--chip) 24%, var(--ground));
+  border-color: var(--chip);
+}
+
+.dot {
+  flex: 0 0 auto;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--chip, var(--accent));
+}
+
+/* ---------- plant hero: mirrors the placard ---------- */
+.hero {
+  background: var(--accent-tint);
+  border-top: 10px solid var(--accent);
+  padding: clamp(1.5rem, 6vw, 3rem) 0 clamp(1.25rem, 5vw, 2.25rem);
+}
+
+.hero img {
+  width: 100%;
+  height: auto;
+  margin-bottom: 1.25rem;
+  border-radius: 4px;
+}
+
+.hero .lakota {
+  font-size: clamp(2.5rem, 11vw, 5rem);
+  line-height: 1.02;
+  letter-spacing: -0.012em;
+  margin-bottom: 0.6rem;
+}
+
+.hero .english {
+  font-size: 1.25rem;
+}
+
+.hero .sci {
+  font-style: italic;
+}
+
+/* ---------- pronunciation ---------- */
+.say {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin-top: 1.25rem;
+  font-family: var(--font-sans);
+}
+
+.say p {
+  margin: 0;
+}
+
+.listen.is-playing {
+  box-shadow: 0 0 0 0 var(--accent);
+  animation: pulse 1.4s ease-out infinite;
+}
+
+@keyframes pulse {
+  to {
+    box-shadow: 0 0 0 14px transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .listen.is-playing {
+    animation: none;
+    box-shadow: 0 0 0 4px var(--accent);
+  }
+}
+
+/* ---------- sections ---------- */
+.section {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+}
+
+.section > h2 {
+  margin-bottom: 0.75rem;
+}
+
+.section.no-rule {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.story {
+  font-size: 1.1rem;
+  line-height: 1.65;
+  margin-top: 2rem;
+}
+
+.uses {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.uses li {
+  margin-bottom: 0.6rem;
+  padding-left: 0.2rem;
+}
+
+.uses li::marker {
+  color: var(--accent);
+}
+
+.note {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--ink-2);
+  border-left: 4px solid var(--rule);
+  padding: 0.35rem 0 0.35rem 1rem;
+  margin-top: 1.75rem;
+}
+
+.note p {
+  margin: 0;
+}
+
+.caution {
+  background: var(--caution-bg);
+  border-left: 4px solid var(--caution);
+  border-radius: 0 4px 4px 0;
+  padding: 0.9rem 1rem 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.caution .uses li::marker {
+  color: var(--caution);
+}
+
+.caution h3 {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--caution);
+  margin-bottom: 0.4rem;
+}
+
+.entry + .entry {
+  border-top: 1px solid var(--rule);
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+}
+
+.entry h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.25rem;
+}
+
+.entry img {
+  border-radius: 4px;
+  margin: 0.75rem 0 1rem;
+}
+
+.byline {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--ink-2);
+  margin-bottom: 0.75rem;
+}
+
+.ingredients {
+  padding-left: 1.2rem;
+  margin: 0 0 1rem;
+}
+
+.sources {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--ink-2);
+}
+
+.empty {
+  color: var(--ink-2);
+}
+
+/* ---------- share form ---------- */
+.form {
+  font-family: var(--font-sans);
+}
+
+.form fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0 0 1.25rem;
+  min-width: 0;
+}
+
+.form legend,
+.form .field > label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.form .hint {
+  font-weight: 400;
+  color: var(--ink-2);
+  font-size: 0.9rem;
+}
+
+.form .choice {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0;
+}
+
+.form .choice input {
+  width: 1.35rem;
+  height: 1.35rem;
+  margin: 0;
+  accent-color: var(--ink);
+}
+
+.form .field {
+  margin-bottom: 1.25rem;
+}
+
+.form textarea,
+.form input[type="text"],
+.form input[type="email"] {
+  width: 100%;
+  font: inherit;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--ink-2);
+  border-radius: 6px;
+  background: var(--ground);
+  color: var(--ink);
+}
+
+.form textarea {
+  min-height: 9rem;
+  resize: vertical;
+}
+
+.form input[type="file"] {
+  font: inherit;
+  max-width: 100%;
+}
+
+.form .status {
+  font-size: 0.9rem;
+  color: var(--ink-2);
+  margin: 0.4rem 0 0;
+}
+
+.form .status.is-error {
+  color: var(--caution);
+}
+
+.form .hidden {
+  display: none;
+}
+
+/* ---------- home ---------- */
+.home-hero {
+  padding: clamp(2rem, 8vw, 4rem) 0 1.5rem;
+}
+
+.home-hero h1 {
+  font-size: clamp(2.4rem, 9vw, 4.2rem);
+  line-height: 1.05;
+}
+
+.home-hero .tagline {
+  font-size: 1.25rem;
+  color: var(--ink-2);
+  margin: 0.75rem 0 0;
+}
+
+.plant-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.plant-list li {
+  border-bottom: 1px solid var(--rule);
+}
+
+.plant-list a {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 0;
+  text-decoration: none;
+}
+
+.plant-list .swatch {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 6px;
+  background: var(--chip);
+  overflow: hidden;
+}
+
+.plant-list .swatch img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.plant-list .name {
+  font-size: 1.45rem;
+  line-height: 1.15;
+}
+
+.plant-list .sub {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--ink-2);
+}
+
+.plant-list .sub i {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: 1.05em;
+}
+
+.page-title {
+  font-size: clamp(2rem, 8vw, 3rem);
+  margin: 2rem 0 1rem;
+}

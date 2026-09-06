@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PlantNav from '../components/PlantNav.astro';
+import { publishedPlants } from '../lib/plants';
+
+const plants = publishedPlants(await getCollection('plants'));
+---
+
+<Base title="Thank you" description="We received what you shared." noindex>
+  <PlantNav slot="nav" plants={plants} />
+  <div class="wrap">
+    <h1 class="page-title">Thank you, we received it</h1>
+    <p class="story">
+      We read everything that comes in. If we add what you shared to a plant page, we will credit you the way you asked.
+    </p>
+    <p><a class="button" href="/">Back to the plants</a></p>
+  </div>
+</Base>

@@ -1,0 +1,17 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PlantNav from '../components/PlantNav.astro';
+import { publishedPlants } from '../lib/plants';
+
+const plants = publishedPlants(await getCollection('plants'));
+---
+
+<Base title="Page not found" description="That page does not exist." noindex>
+  <PlantNav slot="nav" plants={plants} />
+  <div class="wrap">
+    <h1 class="page-title">We could not find that page</h1>
+    <p class="story">The address may have been typed wrong, or the page moved. Pick a plant above, or go back to the start.</p>
+    <p><a class="button" href="/">Back to the plants</a></p>
+  </div>
+</Base>

@@ -1,0 +1,96 @@
+# Sveltia CMS configuration (Decap-compatible).
+# Log in with a GitHub token or, later, the Netlify OAuth provider. See docs/EDITING.md.
+backend:
+  name: github
+  repo: RoundDance/lakota-plants
+  branch: main
+
+media_folder: /public/uploads
+public_folder: /uploads
+
+slug:
+  encoding: ascii
+  clean_accents: true
+
+collections:
+  - name: plants
+    label: Plants
+    label_singular: Plant
+    folder: src/content/plants
+    extension: md
+    format: yaml-frontmatter
+    create: true
+    identifier_field: english_name
+    slug: "{{slug}}"
+    media_folder: ../../assets/uploads
+    public_folder: ../../assets/uploads
+    sortable_fields: [order, english_name]
+    summary: "{{lakota_name}} ({{english_name}})"
+    fields:
+      - { name: lakota_name, label: Lakota name, widget: string, hint: "Diacritics are welcome, for example heȟáka tȟa pȟéžuta." }
+      - { name: english_name, label: English name, widget: string, hint: "Also used to make the web address, so pick it once and keep it." }
+      - { name: scientific_name, label: Scientific name, widget: string, required: false }
+      - { name: phonetic, label: How to say it, widget: string, required: false, hint: "Written out the way it sounds, for example hay-ha-kah tah pay-zhootah." }
+      - { name: audio, label: Pronunciation recording (MP3), widget: file, required: false, media_folder: /public/audio, public_folder: /audio, accept: "audio/*" }
+      - { name: hero, label: Photo, widget: image, required: false }
+      - { name: accent, label: Plant color, widget: color, default: "#7c9c63", hint: "A color drawn from the plant. It tints the top of the page and the plant's tab." }
+      - { name: order, label: Order on the home page, widget: number, value_type: int, default: 0 }
+      - { name: draft, label: Hide from the site, widget: boolean, default: false }
+      - { name: body, label: About the name (story), widget: markdown, required: false }
+      - { name: uses, label: Uses, widget: list, required: false, hint: "One use per line." }
+      - { name: cautions, label: Cautions, widget: list, required: false, hint: "Shown in a red box under the uses." }
+      - { name: sources, label: Sources, widget: markdown, required: false }
+
+  - name: recipes
+    label: Recipes
+    label_singular: Recipe
+    folder: src/content/recipes
+    extension: md
+    format: yaml-frontmatter
+    create: true
+    slug: "{{slug}}"
+    media_folder: ../../assets/uploads
+    public_folder: ../../assets/uploads
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: plants, label: Plants, widget: relation, collection: plants, multiple: true, value_field: "{{slug}}", search_fields: [english_name, lakota_name], display_fields: ["{{english_name}} ({{lakota_name}})"] }
+      - { name: contributor, label: Shared by, widget: string, required: false }
+      - { name: affiliation, label: Tribe or affiliation, widget: string, required: false }
+      - { name: ingredients, label: Ingredients, widget: list, required: false, hint: "One ingredient per line." }
+      - { name: image, label: Photo, widget: image, required: false }
+      - { name: draft, label: Hide from the site, widget: boolean, default: false }
+      - { name: body, label: Method, widget: markdown }
+
+  - name: stories
+    label: Community stories
+    label_singular: Story
+    folder: src/content/stories
+    extension: md
+    format: yaml-frontmatter
+    create: true
+    slug: "{{slug}}"
+    media_folder: ../../assets/uploads
+    public_folder: ../../assets/uploads
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: plants, label: Plants, widget: relation, collection: plants, multiple: true, value_field: "{{slug}}", search_fields: [english_name, lakota_name], display_fields: ["{{english_name}} ({{lakota_name}})"] }
+      - { name: contributor, label: Shared by, widget: string, required: false }
+      - { name: affiliation, label: Tribe or affiliation, widget: string, required: false }
+      - { name: date, label: Date, widget: datetime, date_format: "YYYY-MM-DD", time_format: false, required: false }
+      - { name: image, label: Photo, widget: image, required: false }
+      - { name: draft, label: Hide from the site, widget: boolean, default: false }
+      - { name: body, label: Story, widget: markdown }
+
+  - name: settings
+    label: Site settings
+    files:
+      - name: site
+        label: Site text
+        file: src/data/site.json
+        fields:
+          - { name: title, label: Site title, widget: string }
+          - { name: tagline, label: Tagline, widget: string }
+          - { name: intro, label: Home page introduction, widget: markdown }
+          - { name: disclaimer, label: Disclaimer (shown on every plant page), widget: text }
+          - { name: credits, label: Credits and sources, widget: markdown }
+          - { name: share_blurb, label: Text above the share form, widget: text }

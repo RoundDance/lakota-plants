@@ -1,0 +1,32 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+
+interface Props {
+  recipe: CollectionEntry<'recipes'>;
+}
+
+const { recipe } = Astro.props;
+const { Content } = await render(recipe);
+const who = [recipe.data.contributor, recipe.data.affiliation].filter(Boolean).join(', ');
+---
+
+<article class="entry">
+  <h3>{recipe.data.title}</h3>
+  {who && <p class="byline">Shared by {who}</p>}
+  {
+    recipe.data.image && (
+      <Image src={recipe.data.image} alt={recipe.data.title} widths={[480, 800]} sizes="(min-width: 40rem) 38rem, 100vw" />
+    )
+  }
+  {
+    recipe.data.ingredients.length > 0 && (
+      <ul class="ingredients">
+        {recipe.data.ingredients.map((item) => (
+          <li>{item}</li>
+        ))}
+      </ul>
+    )
+  }
+  <Content />
+</article>
