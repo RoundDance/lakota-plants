@@ -30,7 +30,8 @@ When more people need to edit, switch to GitHub login through Netlify: create a 
 - **Scientific name**: optional, shown in italics.
 - **How to say it**: the phonetic spelling, always shown.
 - **Pronunciation recording**: optional. Upload a voice recording and a Listen button appears. Phone voice memos work.
-- **Photo**: optional. Big photos are fine, the site makes smaller copies for phones.
+- **Photo**: shown as a wide banner at the top of the page and as the small square on the home page. Big photos are fine, the site makes smaller copies for phones. A landscape photo with the plant near the middle crops best.
+- **Photo credit**: shown in small text under the banner. The starting photos are placeholders from Wikimedia Commons under Creative Commons licenses, so their credit lines must stay until the photo is replaced. When you upload your own photo, change the credit to whatever you like, or clear it.
 - **Plant color**: a color taken from the plant. It tints the top of the page and the plant's tab.
 - **Order on the home page**: lower numbers come first.
 - **Hide from the site**: turn on while you are still working on a plant.
@@ -50,6 +51,10 @@ Every time you press Save, the site rebuilds and goes live about a minute later.
    - A **recipe**: open Recipes, press New, fill in the title, tick the plant(s), add the ingredients and method, and put the person's name and tribe in "Shared by" and "Tribe or affiliation". Save.
    - A **story or photo**: open Community stories, press New, and do the same. There is a hidden example story you can copy.
 3. If you want to check with the person first, their email is in the submission.
+
+## Replacing the placeholder photos
+
+Open the plant, click the Photo field, upload your own picture, then edit or clear the Photo credit field. Save once. The rabbit brush photo shows rubber rabbitbrush (Ericameria nauseosa), a guess because the source notes gave no scientific name; replace it if the garden grows a different rabbitbrush.
 
 ## Adding a new plant
 
