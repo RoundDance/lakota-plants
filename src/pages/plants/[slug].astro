@@ -34,19 +34,24 @@ const description = `${d.lakota_name} (${d.english_name}): the Lakota name, how 
   <header class:list={["hero", { "has-banner": Boolean(d.hero) }]} data-plant={plant.id} transition:name="hero">
     {
       d.hero && (
-        <Image
-          class="banner"
-          src={d.hero}
-          alt={d.english_name}
-          widths={[640, 1024, 1600]}
-          sizes="100vw"
-          loading="eager"
-          fetchpriority="high"
-        />
+        <div class="banner-wrap">
+          <Image
+            class="banner"
+            src={d.hero}
+            alt={d.english_name}
+            widths={[640, 1024, 1600]}
+            sizes="100vw"
+            loading="eager"
+            fetchpriority="high"
+          />
+          <div class="banner-text wrap">
+            <h1 class="lakota" transition:name="plant-name">{d.lakota_name}</h1>
+          </div>
+        </div>
       )
     }
     <div class="wrap">
-      <h1 class="lakota" transition:name="plant-name">{d.lakota_name}</h1>
+      {!d.hero && <h1 class="lakota" transition:name="plant-name">{d.lakota_name}</h1>}
       <p class="english">
         {d.english_name}
         {

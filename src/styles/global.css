@@ -268,6 +268,28 @@ a:hover {
   padding-top: 0;
 }
 
+.banner-wrap {
+  display: grid;
+  margin: 0 0 clamp(1.25rem, 4vw, 2rem);
+}
+
+.banner-wrap > * {
+  grid-area: 1 / 1;
+}
+
+/* Dark scrim so the name reads on any photo, tinted toward the plant color. */
+.banner-wrap::after {
+  content: "";
+  grid-area: 1 / 1;
+  background: linear-gradient(
+    to top,
+    color-mix(in oklab, #17261b 82%, var(--accent)) 0%,
+    rgba(23, 38, 27, 0.55) 45%,
+    rgba(23, 38, 27, 0.05) 100%
+  );
+  pointer-events: none;
+}
+
 .hero .banner {
   display: block;
   width: 100%;
@@ -275,7 +297,21 @@ a:hover {
   aspect-ratio: 3 / 2;
   max-height: 46vh;
   object-fit: cover;
-  margin: 0 0 clamp(1.25rem, 4vw, 2rem);
+}
+
+.banner-text {
+  position: relative;
+  z-index: 1;
+  align-self: end;
+  width: 100%;
+  padding-top: 3rem;
+  padding-bottom: clamp(1rem, 4vw, 1.75rem);
+}
+
+.banner-text .lakota {
+  color: #f6f7f2;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  margin-bottom: 0;
 }
 
 @media (min-width: 40rem) {
