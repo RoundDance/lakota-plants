@@ -1,6 +1,8 @@
 ---
 lakota_name: Peji hota sicamna
 english_name: Rabbit brush
+hero: ../../assets/uploads/rabbitbrush.jpg
+hero_credit: "Photo: Matt Lavin, [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Ericameria_nauseosa_or_Chrysothamnus_nauseosus_graveolens_(4004890296).jpg)"
 accent: "#E0B12C"
 order: 6
 draft: false

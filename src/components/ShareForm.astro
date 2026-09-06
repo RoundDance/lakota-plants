@@ -25,6 +25,7 @@ const { plants, selected, from, hideHeading = false } = Astro.props;
     enctype="multipart/form-data"
     data-netlify="true"
     netlify-honeypot="bot-field"
+    data-astro-reload
   >
     <input type="hidden" name="form-name" value="share" />
     <input type="hidden" name="from_page" value={from} />
@@ -70,6 +71,7 @@ const { plants, selected, from, hideHeading = false } = Astro.props;
     <div class="field">
       <label for="share-photo">Add a photo <span class="hint">Optional</span></label>
       <input id="share-photo" type="file" name="photo" accept="image/*" />
+      <img class="preview" alt="" hidden />
       <p class="status photo-status" aria-live="polite"></p>
     </div>
 
@@ -97,17 +99,31 @@ const { plants, selected, from, hideHeading = false } = Astro.props;
     return new File([blob], file.name.replace(/\.\w+$/, '') + '.jpg', { type: 'image/jpeg' });
   }
 
+  function init() {
   for (const form of document.querySelectorAll<HTMLFormElement>('form[name="share"]')) {
+    if (form.dataset.ready) continue;
+    form.dataset.ready = 'true';
     const input = form.querySelector<HTMLInputElement>('input[type="file"]');
     const status = form.querySelector<HTMLElement>('.photo-status');
     const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const preview = form.querySelector<HTMLImageElement>('.preview');
     if (!input || !status || !submit) continue;
+
+    form.addEventListener('submit', () => {
+      submit.textContent = 'Sending…';
+      submit.setAttribute('aria-busy', 'true');
+    });
 
     input.addEventListener('change', async () => {
       status.textContent = '';
       status.classList.remove('is-error');
       submit.disabled = false;
       const file = input.files?.[0];
+      if (preview) {
+        if (preview.src) URL.revokeObjectURL(preview.src);
+        preview.removeAttribute('src');
+        preview.hidden = true;
+      }
       if (!file) return;
 
       let ready = file;
@@ -130,6 +146,13 @@ const { plants, selected, from, hideHeading = false } = Astro.props;
         return;
       }
       status.textContent = `Photo ready (${(ready.size / 1024 / 1024).toFixed(1)} MB).`;
+      if (preview && ready.type.startsWith('image/')) {
+        preview.src = URL.createObjectURL(ready);
+        preview.hidden = false;
+      }
     });
   }
+  }
+
+  document.addEventListener('astro:page-load', init);
 </script>

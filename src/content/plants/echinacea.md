@@ -3,6 +3,8 @@ lakota_name: Ic'ahpe hu
 english_name: Echinacea
 scientific_name: Echinacea pallida & Echinacea angustifolia
 phonetic: ee-chah-pay hoo
+hero: ../../assets/uploads/echinacea.jpg
+hero_credit: "Photo: Blaine Hansel, [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Echinacea_angustifolia_-_Prairie_Cone_Flower.jpg)"
 accent: "#C4587E"
 order: 4
 draft: false

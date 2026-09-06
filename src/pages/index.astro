@@ -26,8 +26,8 @@ const intro = renderMarkdown(site.intro);
       <ul class="plant-list">
         {
           plants.map((plant) => (
-            <li>
-              <a href={plantHref(plant.id)} style={`--chip:${plant.data.accent}`}>
+            <li style={`--chip:${plant.data.accent}`}>
+              <a href={plantHref(plant.id)}>
                 <span class="swatch" aria-hidden="true">
                   {plant.data.hero && <Image src={plant.data.hero} alt="" width={144} height={144} />}
                 </span>

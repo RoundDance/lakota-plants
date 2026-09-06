@@ -3,6 +3,8 @@ lakota_name: heȟáka tȟa pȟéžuta
 english_name: Wild Bergamot
 scientific_name: Monarda fistulosa
 phonetic: hay-ha-kah tah pay-zhootah
+hero: ../../assets/uploads/wild-bergamot.jpg
+hero_credit: "Photo: Eric Hunt, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Monarda_fistulosa_Arkansas.jpg)"
 accent: "#A487C2"
 order: 2
 draft: false

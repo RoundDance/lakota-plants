@@ -3,6 +3,8 @@ lakota_name: Peji hota
 english_name: Prairie Sage
 scientific_name: Artemisia ludoviciana
 phonetic: peh-zhee hoe-tah
+hero: ../../assets/uploads/prairie-sage.jpg
+hero_credit: "Photo: Raffi Kojian, Gardenology.org, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Gardenology.org-IMG_2731_rbgs11jan.jpg)"
 accent: "#9AA898"
 order: 3
 draft: false

@@ -10,7 +10,7 @@ interface Props {
 const { plants, current } = Astro.props;
 ---
 
-<nav class="plant-nav" aria-label="Plants">
+<nav class="plant-nav" aria-label="Plants" transition:name="plant-nav">
   {
     plants.map((plant) => (
       <a
@@ -37,11 +37,15 @@ const { plants, current } = Astro.props;
     else nav.dataset.more = 'end';
   }
 
-  for (const nav of document.querySelectorAll<HTMLElement>('.plant-nav')) {
-    updateFade(nav);
-    nav.addEventListener('scroll', () => updateFade(nav), { passive: true });
-    window.addEventListener('resize', () => updateFade(nav));
-    // Bring the current plant's tab into view.
-    nav.querySelector('[aria-current="page"]')?.scrollIntoView({ inline: 'start', block: 'nearest' });
+  function init() {
+    for (const nav of document.querySelectorAll<HTMLElement>('.plant-nav')) {
+      updateFade(nav);
+      nav.addEventListener('scroll', () => updateFade(nav), { passive: true });
+      window.addEventListener('resize', () => updateFade(nav));
+      // Bring the current plant's tab into view.
+      nav.querySelector('[aria-current="page"]')?.scrollIntoView({ inline: 'start', block: 'nearest' });
+    }
   }
+
+  document.addEventListener('astro:page-load', init);
 </script>

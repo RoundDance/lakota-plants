@@ -22,6 +22,7 @@ const plants = defineCollection({
       phonetic: optionalText,
       audio: optionalText,
       hero: image().optional(),
+      hero_credit: optionalText,
       accent: hexColor,
       order: z.number().int().default(0),
       draft: z.boolean().default(false),

@@ -3,6 +3,8 @@ lakota_name: Wa'hcahca
 english_name: Milkweed
 scientific_name: Asclepias speciosa
 phonetic: wee chag chagk
+hero: ../../assets/uploads/milkweed.jpg
+hero_credit: "Photo: Matt Lavin, [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Asclepias_speciosa_(5258351154).jpg)"
 accent: "#D08A94"
 order: 5
 draft: false

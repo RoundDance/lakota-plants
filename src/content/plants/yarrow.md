@@ -3,6 +3,8 @@ lakota_name: Hante Cahlogan
 english_name: Common Yarrow
 scientific_name: Achillea millefolium
 phonetic: Hante chalowgahn
+hero: ../../assets/uploads/yarrow.jpg
+hero_credit: "Photo: Hélène Rival, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Abeille_Verri%C3%A8res.jpg)"
 accent: "#7C9C63"
 order: 1
 draft: false

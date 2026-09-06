@@ -9,6 +9,7 @@ import ShareForm from '../../components/ShareForm.astro';
 import RecipeCard from '../../components/RecipeCard.astro';
 import StoryCard from '../../components/StoryCard.astro';
 import Sources from '../../components/Sources.astro';
+import { renderMarkdown } from '../../lib/markdown';
 import { itemsForPlant, publishedPlants } from '../../lib/plants';
 
 export async function getStaticPaths() {
@@ -23,26 +24,29 @@ const recipes = itemsForPlant(await getCollection('recipes'), plant.id);
 const stories = itemsForPlant(await getCollection('stories'), plant.id);
 const { Content } = await render(plant);
 const hasStory = Boolean(plant.body && plant.body.trim());
+const credit = renderMarkdown(d.hero_credit);
 const description = `${d.lakota_name} (${d.english_name}): the Lakota name, how to say it, and what this plant relative is used for.`;
 ---
 
 <Base title={`${d.lakota_name}, ${d.english_name}`} description={description} accent={d.accent}>
   <PlantNav slot="nav" plants={plants} current={plant.id} />
 
-  <header class="hero" data-plant={plant.id}>
+  <header class:list={["hero", { "has-banner": Boolean(d.hero) }]} data-plant={plant.id} transition:name="hero">
+    {
+      d.hero && (
+        <Image
+          class="banner"
+          src={d.hero}
+          alt={d.english_name}
+          widths={[640, 1024, 1600]}
+          sizes="100vw"
+          loading="eager"
+          fetchpriority="high"
+        />
+      )
+    }
     <div class="wrap">
-      {
-        d.hero && (
-          <Image
-            src={d.hero}
-            alt={d.english_name}
-            widths={[480, 800, 1200]}
-            sizes="(min-width: 40rem) 38rem, 100vw"
-            loading="eager"
-          />
-        )
-      }
-      <h1 class="lakota">{d.lakota_name}</h1>
+      <h1 class="lakota" transition:name="plant-name">{d.lakota_name}</h1>
       <p class="english">
         {d.english_name}
         {
@@ -59,6 +63,7 @@ const description = `${d.lakota_name} (${d.english_name}): the Lakota name, how 
   </header>
 
   <div class="wrap">
+    {credit && <p class="credit" set:html={credit} />}
     {
       hasStory && (
         <section class="story" aria-label="About the name">

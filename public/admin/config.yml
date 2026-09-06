@@ -32,7 +32,8 @@ collections:
       - { name: scientific_name, label: Scientific name, widget: string, required: false }
       - { name: phonetic, label: How to say it, widget: string, required: false, hint: "Written out the way it sounds, for example hay-ha-kah tah pay-zhootah." }
       - { name: audio, label: Pronunciation recording (MP3), widget: file, required: false, media_folder: /public/audio, public_folder: /audio, accept: "audio/*" }
-      - { name: hero, label: Photo, widget: image, required: false }
+      - { name: hero, label: Photo, widget: image, required: false, hint: "Shown as a banner at the top of the page and as the thumbnail on the home page." }
+      - { name: hero_credit, label: Photo credit, widget: string, required: false, hint: "Who took the photo and its license, shown small under the banner. A Markdown link is fine." }
       - { name: accent, label: Plant color, widget: color, default: "#7c9c63", hint: "A color drawn from the plant. It tints the top of the page and the plant's tab." }
       - { name: order, label: Order on the home page, widget: number, value_type: int, default: 0 }
       - { name: draft, label: Hide from the site, widget: boolean, default: false }

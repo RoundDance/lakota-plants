@@ -58,6 +58,10 @@ svg {
   display: block;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 h1,
 h2,
 h3 {
@@ -233,6 +237,11 @@ a:hover {
   text-decoration: none;
   font-size: 0.95rem;
   scroll-snap-align: start;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.plant-nav a:hover {
+  background: color-mix(in oklab, var(--chip) 14%, var(--ground));
 }
 
 .plant-nav a[aria-current="page"] {
@@ -255,11 +264,31 @@ a:hover {
   padding: clamp(1.5rem, 6vw, 3rem) 0 clamp(1.25rem, 5vw, 2.25rem);
 }
 
-.hero img {
+.hero.has-banner {
+  padding-top: 0;
+}
+
+.hero .banner {
+  display: block;
   width: 100%;
   height: auto;
-  margin-bottom: 1.25rem;
-  border-radius: 4px;
+  aspect-ratio: 3 / 2;
+  max-height: 46vh;
+  object-fit: cover;
+  margin: 0 0 clamp(1.25rem, 4vw, 2rem);
+}
+
+@media (min-width: 40rem) {
+  .hero .banner {
+    aspect-ratio: 21 / 9;
+  }
+}
+
+.credit {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--ink-2);
+  margin: 0.75rem 0 0;
 }
 
 .hero .lakota {
@@ -267,6 +296,14 @@ a:hover {
   line-height: 1.02;
   letter-spacing: -0.012em;
   margin-bottom: 0.6rem;
+  animation: rise 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.3em);
+  }
 }
 
 .hero .english {
@@ -446,7 +483,14 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.4rem 0;
+  margin: 0 -0.5rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.form .choice:has(input:checked) {
+  background: color-mix(in oklab, var(--chip) 18%, var(--ground));
 }
 
 .form .choice input {
@@ -496,6 +540,28 @@ a:hover {
   display: none;
 }
 
+.form .preview {
+  width: 7rem;
+  height: 7rem;
+  object-fit: cover;
+  border-radius: 6px;
+  margin-top: 0.6rem;
+}
+
+
+.button:active {
+  transform: scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* ---------- home ---------- */
 .home-hero {
   padding: clamp(2rem, 8vw, 4rem) 0 1.5rem;
@@ -521,6 +587,12 @@ a:hover {
 
 .plant-list li {
   border-bottom: 1px solid var(--rule);
+  transition: border-color 0.2s ease;
+}
+
+.plant-list li:has(a:hover),
+.plant-list li:has(a:focus-visible) {
+  border-bottom-color: var(--chip);
 }
 
 .plant-list a {
@@ -544,11 +616,27 @@ a:hover {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.plant-list a:hover .swatch img,
+.plant-list a:focus-visible .swatch img {
+  transform: scale(1.06);
 }
 
 .plant-list .name {
   font-size: 1.45rem;
   line-height: 1.15;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.12em;
+  transition: text-decoration-color 0.2s ease;
+}
+
+.plant-list a:hover .name,
+.plant-list a:focus-visible .name {
+  text-decoration-color: var(--chip);
 }
 
 .plant-list .sub {
