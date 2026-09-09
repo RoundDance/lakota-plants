@@ -1,11 +1,12 @@
 ---
-lakota_name: Hante Cahlogan
+lakota_name: Hant̄e ċaƞḣloġaƞ
 english_name: Common Yarrow
 scientific_name: Achillea millefolium
 phonetic: Hante chalowgahn
+audio: ''
 hero: ../../assets/uploads/yarrow.jpg
-hero_credit: "Photo: Hélène Rival, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Abeille_Verri%C3%A8res.jpg)"
-accent: "#7C9C63"
+hero_credit: 'Photo: Hélène Rival, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Abeille_Verri%C3%A8res.jpg)'
+accent: '#7C9C63'
 order: 1
 draft: false
 uses:
@@ -17,7 +18,7 @@ uses:
   - An infusion made from leaves used to treat stomach pains, coughing, and sore throat.
   - An infusion is also used to stimulate sweating and urination, as a mild laxative, to cleanse/detoxify the blood, and to treat internal bleeding.
 cautions: []
-sources: |
+sources: |-
   Lakota plant names by Richard Sherman, spelling by Jael Kampfe, and pronunciation by Ben Sherman.
 
   Uses by Linda Black Elk and Richard Sherman.
