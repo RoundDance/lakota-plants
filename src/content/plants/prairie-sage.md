@@ -1,11 +1,12 @@
 ---
-lakota_name: Peji hota
+lakota_name: Ṗeji ḣot̄a
 english_name: Prairie Sage
 scientific_name: Artemisia ludoviciana
 phonetic: peh-zhee hoe-tah
+audio: ''
 hero: ../../assets/uploads/prairie-sage.jpg
-hero_credit: "Photo: Raffi Kojian, Gardenology.org, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Gardenology.org-IMG_2731_rbgs11jan.jpg)"
-accent: "#9AA898"
+hero_credit: 'Photo: Raffi Kojian, Gardenology.org, [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Gardenology.org-IMG_2731_rbgs11jan.jpg)'
+accent: '#9AA898'
 order: 3
 draft: false
 uses:
@@ -13,7 +14,7 @@ uses:
   - An infusion of the plant is used to treat stomach disorders, to treat intestinal worms, to calm nerves, and to treat colds, sore throats and diarrhea.
   - This sage is important in all ceremonies, as it purifies surroundings and drives away bad, negative, or disruptive spirits. The smoke of this sage has also been shown to be incredibly antimicrobial.
 cautions: []
-sources: |
+sources: |-
   Lakota plant names by Richard Sherman, spelling by Jael Kampfe, and pronunciation by Ben Sherman.
 
   Uses by Linda Black Elk.
