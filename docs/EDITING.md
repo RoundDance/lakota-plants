@@ -52,12 +52,21 @@ Every time you press Save, the site rebuilds and goes live about a minute later.
 
 ## Adding something a visitor sent in
 
-1. In Netlify, open Forms, then the `share` form. Each submission shows which plants they ticked, their message, name, tribe, email and any photo.
+1. In Netlify, open Forms, then the `share` form. Each submission shows which plants they ticked, their message, the name they know the plant by in their own language, their name, tribe, email and any photo.
 2. Decide whether it is a recipe, a story, or a use.
    - A **use**: open the plant, add a line under Uses, save.
    - A **recipe**: open Recipes, press New, fill in the title, tick the plant(s), add the ingredients and method, and put the person's name and tribe in "Shared by" and "Tribe or affiliation". Save.
    - A **story or photo**: open Community stories, press New, and do the same. There is a hidden example story you can copy.
+   - A **name in another language**: check it with the person first if you can, then add it to the plant's "About the name" story, crediting them and their nation.
 3. If you want to check with the person first, their email is in the submission.
+
+### About the photos people send
+
+The share form only offers real image types, checks that a chosen file truly is one, and then rebuilds the photo from its pixels before sending. Three things follow from that:
+
+- **The photo you receive is a fresh JPEG**, not the visitor's original file. Anything hidden alongside the picture does not survive the rebuild.
+- **The location is stripped.** Phones record where a photo was taken. Rebuilding drops that, so a picture of a gathering place does not arrive carrying its coordinates.
+- **It is not a guarantee.** These checks run in the visitor's browser, and someone determined can send a file straight past them. So: download a submitted file and confirm it opens as a picture before you do anything else with it. Do not click a submitted file's link to open it in your browser, and never run one.
 
 ## Replacing the placeholder photos
 

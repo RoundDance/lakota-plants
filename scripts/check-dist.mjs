@@ -55,6 +55,7 @@ for (const file of files) {
     'lakota name': lakota ? html.includes(lakota) : true,
     'plant marker': html.includes(`data-plant="${slug}"`),
     'qr code': await exists(path.join(dist, 'qr', `${slug}.png`)),
+    'language question': html.includes('name="language"'),
   };
   for (const [label, ok] of Object.entries(expect)) {
     if (!ok) problems.push(`plants/${slug}: ${label} not found`);
@@ -70,9 +71,20 @@ const shared = [
   'admin/config.yml',
   'sitemap-index.xml',
   'robots.txt',
+  'qr/site.png',
 ];
 for (const page of shared) {
   if (!(await exists(path.join(dist, page)))) problems.push(`missing ${page}`);
+}
+
+// The share page carries the same form, and the photo field has to keep asking
+// for named image types. A wildcard here would put the picker back to offering
+// every file on the phone, which is where a harmful upload starts.
+const shareHtml = await readPage('share/index.html');
+if (shareHtml) {
+  if (!shareHtml.includes('name="language"')) problems.push('share: language question not found');
+  if (!shareHtml.includes('accept="image/jpeg')) problems.push('share: photo accept list not found');
+  if (shareHtml.includes('accept="image/*"')) problems.push('share: photo accept is a wildcard');
 }
 
 if (problems.length) {

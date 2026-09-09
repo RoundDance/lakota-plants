@@ -95,3 +95,4 @@ collections:
           - { name: disclaimer, label: Disclaimer (shown on every plant page), widget: text }
           - { name: credits, label: Credits and sources, widget: markdown }
           - { name: share_blurb, label: Text above the share form, widget: text }
+          - { name: language_blurb, label: Text above the language question on the share form, widget: text }

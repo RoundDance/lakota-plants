@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import site from '../data/site.json';
 import { checkboxName } from '../lib/plants';
+import { ACCEPTED_IMAGE_TYPES } from '../lib/upload';
 
 interface Props {
   plants: CollectionEntry<'plants'>[];
@@ -53,6 +54,23 @@ const { plants, selected, from, hideHeading = false } = Astro.props;
       <textarea id="share-message" name="message" required></textarea>
     </div>
 
+    <fieldset>
+      <legend>Do you know these plants in your language? <span class="hint">Optional</span></legend>
+      <p class="legend-note">{site.language_blurb}</p>
+
+      <div class="field">
+        <label for="share-language">What language or nation?</label>
+        <input id="share-language" type="text" name="language" />
+      </div>
+
+      <div class="field">
+        <label for="share-language-names">
+          What names do you know? <span class="hint">Tell us which plant goes with which name.</span>
+        </label>
+        <textarea id="share-language-names" class="short" name="language_names"></textarea>
+      </div>
+    </fieldset>
+
     <div class="field">
       <label for="share-name">What's your name? <span class="hint">Optional</span></label>
       <input id="share-name" type="text" name="name" autocomplete="name" />
@@ -70,7 +88,7 @@ const { plants, selected, from, hideHeading = false } = Astro.props;
 
     <div class="field">
       <label for="share-photo">Add a photo <span class="hint">Optional</span></label>
-      <input id="share-photo" type="file" name="photo" accept="image/*" />
+      <input id="share-photo" type="file" name="photo" accept={ACCEPTED_IMAGE_TYPES.join(',')} />
       <img class="preview" alt="" hidden />
       <p class="status photo-status" aria-live="polite"></p>
     </div>
@@ -80,11 +98,20 @@ const { plants, selected, from, hideHeading = false } = Astro.props;
 </section>
 
 <script>
+  import { SNIFF_BYTES, sniffImageType } from '../lib/upload';
+
+  /** Biggest file we will even try to decode, so a huge one cannot lock up a phone. */
+  const MAX_SOURCE_BYTES = 25 * 1024 * 1024;
+  /** Biggest file we will send. */
   const MAX_BYTES = 7 * 1024 * 1024;
-  const SHRINK_ABOVE = 1_500_000;
   const MAX_EDGE = 1600;
 
-  async function shrink(file: File): Promise<File> {
+  /**
+   * Rebuild a photo from its decoded pixels. A file that is not really an image
+   * fails to decode and is refused; one that is loses whatever rode along beside
+   * the pixels, including the EXIF tags that record where the photo was taken.
+   */
+  async function reencode(file: File): Promise<File> {
     const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
     const scale = Math.min(1, MAX_EDGE / Math.max(bitmap.width, bitmap.height));
     const canvas = document.createElement('canvas');
@@ -100,58 +127,80 @@ const { plants, selected, from, hideHeading = false } = Astro.props;
   }
 
   function init() {
-  for (const form of document.querySelectorAll<HTMLFormElement>('form[name="share"]')) {
-    if (form.dataset.ready) continue;
-    form.dataset.ready = 'true';
-    const input = form.querySelector<HTMLInputElement>('input[type="file"]');
-    const status = form.querySelector<HTMLElement>('.photo-status');
-    const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]');
-    const preview = form.querySelector<HTMLImageElement>('.preview');
-    if (!input || !status || !submit) continue;
+    for (const form of document.querySelectorAll<HTMLFormElement>('form[name="share"]')) {
+      if (form.dataset.ready) continue;
+      form.dataset.ready = 'true';
+      const input = form.querySelector<HTMLInputElement>('input[type="file"]');
+      const status = form.querySelector<HTMLElement>('.photo-status');
+      const submit = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+      const preview = form.querySelector<HTMLImageElement>('.preview');
+      if (!input || !status || !submit) continue;
 
-    form.addEventListener('submit', () => {
-      submit.textContent = 'Sending…';
-      submit.setAttribute('aria-busy', 'true');
-    });
+      const say = (message: string, isError = false) => {
+        status.textContent = message;
+        status.classList.toggle('is-error', isError);
+      };
 
-    input.addEventListener('change', async () => {
-      status.textContent = '';
-      status.classList.remove('is-error');
-      submit.disabled = false;
-      const file = input.files?.[0];
-      if (preview) {
+      /** Drop the file as well as complaining, so nothing we refused can be sent. */
+      const refuse = (message: string) => {
+        input.value = '';
+        say(message, true);
+      };
+
+      const clearPreview = () => {
+        if (!preview) return;
         if (preview.src) URL.revokeObjectURL(preview.src);
         preview.removeAttribute('src');
         preview.hidden = true;
-      }
-      if (!file) return;
+      };
 
-      let ready = file;
-      if (file.type.startsWith('image/') && file.size > SHRINK_ABOVE) {
-        status.textContent = 'Making the photo smaller so it sends faster.';
-        try {
-          ready = await shrink(file);
-          const transfer = new DataTransfer();
-          transfer.items.add(ready);
-          input.files = transfer.files;
-        } catch {
-          ready = file;
+      form.addEventListener('submit', () => {
+        submit.textContent = 'Sending…';
+        submit.setAttribute('aria-busy', 'true');
+      });
+
+      input.addEventListener('change', async () => {
+        say('');
+        clearPreview();
+        const file = input.files?.[0];
+        if (!file) return;
+
+        if (file.size > MAX_SOURCE_BYTES) {
+          refuse('That file is too big to work with. Please choose a photo under 25 MB.');
+          return;
         }
-      }
 
-      if (ready.size > MAX_BYTES) {
-        status.textContent = 'That photo is too large to send (over 7 MB). Please choose a smaller one.';
-        status.classList.add('is-error');
-        submit.disabled = true;
-        return;
-      }
-      status.textContent = `Photo ready (${(ready.size / 1024 / 1024).toFixed(1)} MB).`;
-      if (preview && ready.type.startsWith('image/')) {
-        preview.src = URL.createObjectURL(ready);
-        preview.hidden = false;
-      }
-    });
-  }
+        const head = new Uint8Array(await file.slice(0, SNIFF_BYTES).arrayBuffer());
+        if (!sniffImageType(head)) {
+          refuse('That file is not a photo. Please choose a JPEG, PNG, WebP or HEIC image.');
+          return;
+        }
+
+        say('Getting the photo ready…');
+        let ready: File;
+        try {
+          ready = await reencode(file);
+        } catch {
+          refuse('We could not read that as a photo. Please choose a JPEG, PNG or WebP image.');
+          return;
+        }
+
+        if (ready.size > MAX_BYTES) {
+          refuse('That photo is too large to send (over 7 MB). Please choose a smaller one.');
+          return;
+        }
+
+        const transfer = new DataTransfer();
+        transfer.items.add(ready);
+        input.files = transfer.files;
+
+        say(`Photo ready (${(ready.size / 1024 / 1024).toFixed(1)} MB).`);
+        if (preview) {
+          preview.src = URL.createObjectURL(ready);
+          preview.hidden = false;
+        }
+      });
+    }
   }
 
   document.addEventListener('astro:page-load', init);

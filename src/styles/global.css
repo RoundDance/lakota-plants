@@ -515,6 +515,18 @@ a:hover {
   font-size: 0.9rem;
 }
 
+/* The line of explanation under a legend, before the fields it introduces. */
+.form .legend-note {
+  color: var(--ink-2);
+  font-size: 0.9rem;
+  margin: -0.15rem 0 0.9rem;
+}
+
+/* A fieldset already carries the gap after its last field. */
+.form fieldset .field:last-child {
+  margin-bottom: 0;
+}
+
 .form .choice {
   display: flex;
   align-items: center;
@@ -555,6 +567,11 @@ a:hover {
 .form textarea {
   min-height: 9rem;
   resize: vertical;
+}
+
+/* For a secondary answer, where a full-height box would overstate the ask. */
+.form textarea.short {
+  min-height: 5rem;
 }
 
 .form input[type="file"] {
