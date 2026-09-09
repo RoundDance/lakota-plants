@@ -1,11 +1,12 @@
 ---
-lakota_name: heȟáka tȟa pȟéžuta
+lakota_name: Heḣak̄a t́a ṗejot̄a
 english_name: Wild Bergamot
 scientific_name: Monarda fistulosa
 phonetic: hay-ha-kah tah pay-zhootah
+audio: ''
 hero: ../../assets/uploads/wild-bergamot.jpg
-hero_credit: "Photo: Eric Hunt, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Monarda_fistulosa_Arkansas.jpg)"
-accent: "#A487C2"
+hero_credit: 'Photo: Eric Hunt, [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Monarda_fistulosa_Arkansas.jpg)'
+accent: '#A487C2'
 order: 2
 draft: false
 uses:
@@ -14,7 +15,7 @@ uses:
   - The leaves are chewed while singing, dancing or hunting to prevent sore throat.
   - A decoction of the whole plant is used to bathe diabetic ulcers. This will kill the infection and promote healing.
 cautions: []
-sources: |
+sources: |-
   Lakota plant names by Richard Sherman, spelling by Jael Kampfe, and pronunciation by Ben Sherman.
 
   Uses by Linda Black Elk.
