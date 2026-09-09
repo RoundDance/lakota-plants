@@ -26,6 +26,8 @@ The button relies on a GitHub OAuth app registered with Netlify. If you ever nee
 2. On the repository page, Settings, Collaborators, Add people, enter their username, and give them **Write** access. They accept the invitation by email.
 3. They open the editor and press Sign In with GitHub.
 
+The repository is public, and it needs to stay that way. Netlify's free plan will only build changes made by one person when a repository is private, so a second editor's saves would be refused and the site would quietly stay on the old version. Nothing warns you in the editor, and the save itself looks like it worked.
+
 ### If the button ever fails
 
 Press **Sign In Using Access Token** instead. Create the token at https://github.com/settings/personal-access-tokens/new: repository access limited to `lakota-plants`, and under Repository permissions set **Contents** to Read and write. Paste it into the editor. Tokens expire, so this is the fallback, not the everyday way in.

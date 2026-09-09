@@ -62,4 +62,8 @@ Put the new version and `sha384-<hash>` into `public/admin/index.html`.
 
 ## Deploying
 
-Push to `main` and Netlify builds. Each production deploy costs 15 of the free plan's 300 monthly credits, so batch content edits. Form detection must be enabled once in the Netlify Forms UI, and the email notification set there.
+Push to `main` and Netlify builds. Each production deploy costs 15 of the free plan's 300 monthly credits, so batch content edits.
+
+**The repository has to stay public.** On a private repo the free plan builds commits from one Git contributor only; a save by any other editor fails the build outright with "unrecognized Git contributor" and never reaches the site. Nothing in the deploy log says the site is stale, so this is silent. Making the repo private again would break every editor except the account linked to Netlify. The paid alternatives are Netlify Pro, or issuing one shared editor token so every commit lands under the same account.
+
+Netlify parses forms only when Netlify itself runs the build. Prebuilt deploys (`netlify deploy --dir`, or building in CI and uploading `dist`) skip form detection, so moving the build off Netlify would silently stop the share form collecting submissions. Form detection and the submission email notifications are set in the Netlify UI, not in this repo.
