@@ -1,9 +1,12 @@
 ---
-lakota_name: Peji hota sicamna
+lakota_name: Ṕeji ḣot̄a śiċamna
 english_name: Rabbit brush
+scientific_name: ''
+phonetic: ''
+audio: ''
 hero: ../../assets/uploads/rabbitbrush.jpg
-hero_credit: "Photo: Matt Lavin, [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Ericameria_nauseosa_or_Chrysothamnus_nauseosus_graveolens_(4004890296).jpg)"
-accent: "#E0B12C"
+hero_credit: 'Photo: Matt Lavin, [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Ericameria_nauseosa_or_Chrysothamnus_nauseosus_graveolens_(4004890296).jpg)'
+accent: '#E0B12C'
 order: 6
 draft: false
 uses:
@@ -14,7 +17,7 @@ uses:
   - An infusion of the leaves and stems has been used to treat colds, diarrhea, and stomach cramps. It has also been used externally as a wash for sores and skin eruptions, especially smallpox.
 cautions:
   - In large quantities, this plant can be toxic.
-sources: |
+sources: |-
   Lakota plant names by Richard Sherman, spelling by Jael Kampfe, and pronunciation by Ben Sherman.
 
   Uses by Linda Black Elk.
