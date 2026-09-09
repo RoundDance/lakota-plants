@@ -37,6 +37,22 @@ if [ -z "${CACHED_COMMIT_REF:-}" ] || [ -z "${COMMIT_REF:-}" ]; then
   exit 1
 fi
 
+# Netlify clones shallowly, so the last built commit is often not in the
+# checkout. `git diff` then dies with "bad revision" and every push looks like
+# a change, which quietly turns the batching off. Go and get it.
+have() { git cat-file -e "$1^{commit}" 2>/dev/null; }
+
+if ! have "$CACHED_COMMIT_REF"; then
+  git fetch --quiet --deepen=50 origin 2>/dev/null || true
+fi
+if ! have "$CACHED_COMMIT_REF"; then
+  git fetch --quiet origin "$CACHED_COMMIT_REF" 2>/dev/null || true
+fi
+if ! have "$CACHED_COMMIT_REF"; then
+  echo "should-build: cannot reach the last built commit $CACHED_COMMIT_REF to compare against. Building rather than guessing."
+  exit 1
+fi
+
 if [ -n "${INCOMING_HOOK_TITLE:-}" ]; then
   if git diff --quiet "$CACHED_COMMIT_REF" "$COMMIT_REF" -- . "${PROSE[@]}"; then
     echo "should-build: publish requested, but nothing has changed since the last deploy. Skipping."
