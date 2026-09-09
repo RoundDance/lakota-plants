@@ -1,0 +1,69 @@
+# Publishes whatever editors have saved since the last deploy.
+#
+# Saves from /admin/ land on main without deploying — see scripts/should-build.sh
+# for why. This is what actually sends them out: once a morning, and on demand
+# from the Actions tab when something should not wait.
+#
+# The site is built here first. GitHub Actions is free on a public repository,
+# so a broken edit fails here for nothing instead of spending 15 Netlify
+# credits discovering the same thing.
+
+name: Publish
+
+on:
+  # "Run workflow" on the Actions tab. This is the publish-now button.
+  workflow_dispatch:
+  # Mondays and Thursdays at 14:00 UTC: 8am Mountain in summer, 7am in
+  # winter. Cron does not follow daylight saving, so it drifts by an hour
+  # rather than being wrong.
+  #
+  # Twice a week, not daily. The allowance is 300 credits and a deploy costs
+  # 15, so 20 deploys a month is the ceiling for everything — publishes, code
+  # pushes and the site's own traffic. A daily schedule could ask for 30 and
+  # run the account dry, and an exhausted allowance pauses the site until the
+  # first of the next month. Twice a week is about 9, which leaves room.
+  # Anything that should not wait goes out with Run workflow.
+  schedule:
+    - cron: '0 14 * * 1,4'
+
+# Never two publishes at once.
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+
+      - run: npm ci
+
+      # Everything Netlify would run: astro check, the build, the QR codes and
+      # the post-build checks.
+      - name: Check the build
+        run: npm run build
+
+      - run: npm test
+
+      - name: Ask Netlify to publish
+        env:
+          HOOK_URL: ${{ secrets.NETLIFY_BUILD_HOOK_URL }}
+        run: |
+          if [ -z "$HOOK_URL" ]; then
+            echo "::error::The NETLIFY_BUILD_HOOK_URL secret is not set. Create a build hook at Netlify > Project configuration > Build & deploy > Build hooks, then add it under Settings > Secrets and variables > Actions."
+            exit 1
+          fi
+          status=$(curl -sS -X POST -d '{}' -o /dev/null -w '%{http_code}' "$HOOK_URL")
+          if [ "${status:0:1}" != "2" ]; then
+            echo "::error::The build hook refused the request (HTTP $status)."
+            exit 1
+          fi
+          echo "Netlify accepted the publish (HTTP $status)."
+          echo "If nothing has changed since the last deploy, Netlify skips the"
+          echo "build and it costs nothing. Otherwise it is live in about a minute."

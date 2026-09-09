@@ -1,8 +1,9 @@
 [build]
   command = "npm run build"
   publish = "dist"
-  # Skip a deploy (and its credits) when only docs changed.
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- . ':!docs' ':!README.md'"
+  # Decides whether this push is worth its 15 credits. Content edits wait for
+  # a publish; code changes deploy on push. The script explains the rest.
+  ignore = "bash scripts/should-build.sh"
 
 [build.environment]
   NODE_VERSION = "24"

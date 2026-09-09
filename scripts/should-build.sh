@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+#
+# Decides whether a push deserves a deploy. Netlify runs this as the `ignore`
+# command in netlify.toml: exit 0 means skip the build, anything else means
+# build it.
+#
+# A deploy costs 15 of the free plan's 300 monthly credits, so saving after
+# every field in the CMS would burn the month in a week. Content edits
+# therefore pile up on main without deploying, and go live together when
+# somebody asks for a publish. Code changes still deploy on push, because
+# those are rare and usually wanted straight away.
+#
+# "Asking for a publish" means triggering the build hook, which Netlify tells
+# us about through INCOMING_HOOK_TITLE. The Actions workflow in
+# .github/workflows/publish.yml does that on a schedule and on demand.
+
+set -u
+
+# Everything an editor can reach from /admin/. Compare with the media_folder
+# and public_folder settings in public/admin/config.yml.
+CONTENT=(
+  ':!src/content'
+  ':!src/data'
+  ':!src/assets/uploads'
+  ':!public/audio'
+  ':!public/uploads'
+)
+
+# Prose about the project, which never changes the built site.
+PROSE=(':!docs' ':!README.md')
+
+# CACHED_COMMIT_REF is the last commit Netlify built successfully. Without it
+# there is nothing to compare against, and `git diff` against the working tree
+# would report no changes and skip forever. Build instead.
+if [ -z "${CACHED_COMMIT_REF:-}" ] || [ -z "${COMMIT_REF:-}" ]; then
+  echo "should-build: no previous deploy to compare against. Building."
+  exit 1
+fi
+
+if [ -n "${INCOMING_HOOK_TITLE:-}" ]; then
+  if git diff --quiet "$CACHED_COMMIT_REF" "$COMMIT_REF" -- . "${PROSE[@]}"; then
+    echo "should-build: publish requested, but nothing has changed since the last deploy. Skipping."
+    exit 0
+  fi
+  echo "should-build: publish requested and there are changes. Building."
+  exit 1
+fi
+
+if git diff --quiet "$CACHED_COMMIT_REF" "$COMMIT_REF" -- . "${PROSE[@]}" "${CONTENT[@]}"; then
+  echo "should-build: only content or prose changed. It will go out with the next publish."
+  exit 0
+fi
+
+echo "should-build: code or configuration changed. Building."
+exit 1

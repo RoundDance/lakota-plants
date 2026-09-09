@@ -48,9 +48,15 @@ Press **Sign In Using Access Token** instead. Create the token at https://github
 - **Uses**: one per line. **Cautions**: one per line, shown in a red box.
 - **Sources**: who the names, spelling, pronunciation and uses came from.
 
-## Saving and how long it takes
+## Saving and when it goes live
 
-Every time you press Save, the site rebuilds and goes live about a minute later. Each rebuild uses some of Netlify's free monthly allowance (300 credits a month, 15 per rebuild, and the site's own traffic uses a little too). Around fifteen saves a month is comfortable. Finish an entry, then save once, rather than saving after every field. If the allowance ever runs out, the site pauses until the first of the next month. You can see the usage in the Netlify dashboard under Usage.
+Saving does not put the change on the site straight away. Your work is kept the moment you press Save, and everything saved since the last publish goes out together on the next Monday or Thursday morning, a little after 8am.
+
+That wait is on purpose. Each publish costs 15 of Netlify's 300 free monthly credits, which is twenty for the whole month, so sending the site out after every save would use it up in a week or two. Because they go out in a batch, you can save as often as you like — after every field, if that suits you — and it still costs one publish.
+
+If something should not wait for Monday or Thursday, you can send it out yourself. Open the repository on GitHub, go to the **Actions** tab, choose **Publish** in the left-hand list, then **Run workflow**. It is live about a minute later.
+
+Nothing is at risk while it waits: a saved change is already stored, it is just not on the public page yet. If you ever want to check what is waiting, the repository's commit list shows every save. You can see the credit usage in the Netlify dashboard under Usage.
 
 ## Adding something a visitor sent in
 
