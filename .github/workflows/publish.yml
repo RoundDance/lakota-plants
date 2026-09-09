@@ -13,18 +13,19 @@ name: Publish
 on:
   # "Run workflow" on the Actions tab. This is the publish-now button.
   workflow_dispatch:
-  # Mondays and Thursdays at 14:00 UTC: 8am Mountain in summer, 7am in
-  # winter. Cron does not follow daylight saving, so it drifts by an hour
-  # rather than being wrong.
+  # The schedule is off for the rest of this billing period. On 2026-09-09 the
+  # allowance was down to 75 credits — five deploys — with the period running
+  # to 6 October, so publishing is by hand until it resets. Uncomment then.
   #
-  # Twice a week, not daily. The allowance is 300 credits and a deploy costs
-  # 15, so 20 deploys a month is the ceiling for everything — publishes, code
-  # pushes and the site's own traffic. A daily schedule could ask for 30 and
-  # run the account dry, and an exhausted allowance pauses the site until the
-  # first of the next month. Twice a week is about 9, which leaves room.
-  # Anything that should not wait goes out with Run workflow.
-  schedule:
-    - cron: '0 14 * * 1,4'
+  # Mondays and Thursdays at 14:00 UTC: 8am Mountain in summer, 7am in winter.
+  # Cron does not follow daylight saving, so it drifts by an hour rather than
+  # being wrong. Twice a week, not daily: the allowance is 300 credits at 15 a
+  # deploy, so 20 a month covers publishes, code pushes and traffic together.
+  # A daily schedule could ask for 30 and run the account dry, and an
+  # exhausted allowance pauses the site until the period rolls over.
+  #
+  # schedule:
+  #   - cron: '0 14 * * 1,4'
 
 # Never two publishes at once.
 concurrency:
