@@ -1,5 +1,5 @@
 ---
-lakota_name: Heḣak̄a t́a ṗejot̄a
+lakota_name: Heḣak̄a t́a ṗejut̄a
 english_name: Wild Bergamot
 scientific_name: Monarda fistulosa
 phonetic: hay-ha-kah tah pay-zhootah
