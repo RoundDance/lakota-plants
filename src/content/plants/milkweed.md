@@ -1,11 +1,12 @@
 ---
-lakota_name: Wa'hcahca
+lakota_name: Wah́ċah́ċa
 english_name: Milkweed
 scientific_name: Asclepias speciosa
 phonetic: wee chag chagk
+audio: ''
 hero: ../../assets/uploads/milkweed.jpg
-hero_credit: "Photo: Matt Lavin, [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Asclepias_speciosa_(5258351154).jpg)"
-accent: "#D08A94"
+hero_credit: 'Photo: Matt Lavin, [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/), via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Asclepias_speciosa_(5258351154).jpg)'
+accent: '#D08A94'
 order: 5
 draft: false
 uses:
@@ -16,7 +17,7 @@ uses:
   - Open flowers are chopped up to make a sort of chutney or "preserve."
 cautions:
   - This plant can be toxic as it matures, so use caution.
-sources: |
+sources: |-
   Lakota plant names by Richard Sherman, spelling by Jael Kampfe, and pronunciation by Ben Sherman.
 
   Uses by Linda Black Elk.
