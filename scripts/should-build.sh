@@ -26,8 +26,11 @@ CONTENT=(
   ':!public/uploads'
 )
 
-# Prose about the project, which never changes the built site.
-PROSE=(':!docs' ':!README.md')
+# Things that cannot change the built site: notes about the project, the CI
+# workflow, and this script. All three only decide when to ask Netlify for a
+# build; none of them is read while one runs. netlify.toml is deliberately not
+# here, because its headers and redirects do ship.
+PROSE=(':!docs' ':!README.md' ':!.github' ':!scripts/should-build.sh')
 
 # CACHED_COMMIT_REF is the last commit Netlify built successfully. Without it
 # there is nothing to compare against, and `git diff` against the working tree
@@ -53,6 +56,10 @@ if ! have "$CACHED_COMMIT_REF"; then
   exit 1
 fi
 
+# In practice Netlify does not appear to run this script when a build hook
+# asks for the build — two hook publishes of an unchanged site both built.
+# The workflow therefore decides whether to fire the hook at all. This branch
+# stays as a second line of defence in case that behaviour differs or changes.
 if [ -n "${INCOMING_HOOK_TITLE:-}" ]; then
   if git diff --quiet "$CACHED_COMMIT_REF" "$COMMIT_REF" -- . "${PROSE[@]}"; then
     echo "should-build: publish requested, but nothing has changed since the last deploy. Skipping."

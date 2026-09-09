@@ -64,7 +64,7 @@ Put the new version and `sha384-<hash>` into `public/admin/index.html`.
 
 Code changes deploy on push. Content saved from `/admin/` does not — it waits on `main` until a publish, because each deploy costs 15 of the free plan's 300 monthly credits and CMS saves are frequent. `scripts/should-build.sh` makes that call and runs as the `ignore` command below.
 
-Publishing happens Mondays and Thursdays at 14:00 UTC, and on demand from the repository's Actions tab, through `.github/workflows/publish.yml`. Twice a week rather than daily because 300 credits at 15 each is only 20 deploys a month, shared with code pushes and traffic. It builds and tests on GitHub's runners first — free on a public repo — then POSTs the `NETLIFY_BUILD_HOOK_URL` secret so Netlify runs the real build. A publish with nothing waiting is skipped and costs nothing.
+Publishing happens Mondays and Thursdays at 14:00 UTC, and on demand from the repository's Actions tab, through `.github/workflows/publish.yml`. Twice a week rather than daily because 300 credits at 15 each is only 20 deploys a month, shared with code pushes and traffic. It builds and tests on GitHub's runners first — free on a public repo — then POSTs the `NETLIFY_BUILD_HOOK_URL` secret so Netlify runs the real build. A publish with nothing waiting is skipped before the hook is fired, and costs nothing. That check lives in the workflow rather than in `should-build.sh` because Netlify does not run the ignore command for hook-triggered builds — it takes the request at its word.
 
 Setting that up needs a build hook at Netlify, Project configuration, Build & deploy, Build hooks, saved as the `NETLIFY_BUILD_HOOK_URL` repository secret under Settings, Secrets and variables, Actions.
 
