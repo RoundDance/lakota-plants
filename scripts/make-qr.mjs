@@ -1,6 +1,7 @@
 // Writes one SVG and one PNG QR code per published plant into dist/qr/ after
-// the build, so every deploy carries a printable code for each plant at
-// /qr/<slug>.png. Runs as part of npm run build.
+// the build, plus a site.png/site.svg pair for the site root, so every deploy
+// carries a printable code for each plant at /qr/<slug>.png and one for the
+// whole garden at /qr/site.png. Runs as part of npm run build.
 import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import QRCode from 'qrcode';
@@ -25,4 +26,10 @@ for (const file of files) {
   count += 1;
 }
 
-console.log(`qr: wrote ${count} code pairs to ${path.relative(process.cwd(), outDir)}/`);
+// The whole-garden code, for the gate sign and anything printed off-site.
+const siteUrl = new URL('/', SITE_URL).toString();
+await QRCode.toFile(path.join(outDir, 'site.png'), siteUrl, { ...options, width: 1024 });
+await writeFile(path.join(outDir, 'site.svg'), await QRCode.toString(siteUrl, { ...options, type: 'svg' }));
+console.log(`qr: site    ->  ${siteUrl}`);
+
+console.log(`qr: wrote ${count} plant code pairs plus the site code to ${path.relative(process.cwd(), outDir)}/`);
