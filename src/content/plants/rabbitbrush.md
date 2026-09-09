@@ -1,7 +1,7 @@
 ---
 lakota_name: Ṕeji ḣot̄a śiċamna
-english_name: Rabbit brush
-scientific_name: ''
+english_name: Rubber Rabbitbrush
+scientific_name: Ericameria nauseosa
 phonetic: ''
 audio: ''
 hero: ../../assets/uploads/rabbitbrush.jpg
